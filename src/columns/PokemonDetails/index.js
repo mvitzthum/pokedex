@@ -12,6 +12,8 @@ const usePokemonGames = pokemon => {
   const [state, setState] = React.useState("idle");
 
   useEffect(() => {
+    if (!pokemon) return;
+
     setGames(null);
 
     setState("loading");
