@@ -50,11 +50,12 @@ const usePokemon = name => {
   const [state, setState] = React.useState("idle");
 
   useEffect(() => {
+    if (!name) return;
+
     setPokemon(null);
 
     setState("loading");
 
-    if (!name) return;
     fetchPokemonByName(name)
       .then(pokemon => {
         setPokemon(pokemon);
