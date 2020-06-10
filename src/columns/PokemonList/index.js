@@ -10,10 +10,20 @@ import { fetchPokemons } from "../../api/pokeapi";
 const PokemonList = props => {
   const [pokemons, setPokemons] = useState(null);
 
+  const [state, setState] = useState("idle");
+
   useEffect(() => {
-    fetchPokemons().then(pokemons => {
-      setPokemons(pokemons);
-    });
+    setState("loading");
+    fetchPokemons()
+      .then(pokemons => {
+        setPokemons(pokemons);
+      })
+      .catch(() => {
+        setState("error");
+      })
+      .finally(() => {
+        setState("idle");
+      });
   }, []);
 
   return (
@@ -21,9 +31,10 @@ const PokemonList = props => {
       <Link onClick={() => props.setSelectedPokemon(null)}>
         <SidebarTitle>Pokedex</SidebarTitle>
       </Link>
-      {!pokemons ? (
-        <Spinner />
-      ) : (
+      {state === "loading" && <Spinner />}
+      {state === "error" && <div>Something went wrong.</div>}
+      {state === "idle" &&
+        pokemons &&
         pokemons.map(pokemon => (
           <Link
             key={pokemon.name}
@@ -31,8 +42,7 @@ const PokemonList = props => {
           >
             <SidebarItem>{pokemon.name}</SidebarItem>
           </Link>
-        ))
-      )}
+        ))}
     </Sidebar>
   );
 };
