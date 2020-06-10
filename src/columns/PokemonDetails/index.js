@@ -12,11 +12,12 @@ const PokemonGames = props => {
   const [state, setState] = React.useState("idle");
 
   useEffect(() => {
+    if (!props.pokemon) return;
+
     setGames(null);
 
     setState("loading");
 
-    if (!props.pokemon) return;
     fetchPokemonGames(props.pokemon.game_indices.map(game => game.version.name))
       .then(games => {
         setGames(games);
@@ -44,11 +45,11 @@ const Pokemon = props => {
   const [state, setState] = React.useState("idle");
 
   useEffect(() => {
+    if (!props.name) return;
+
     setPokemon(null);
 
     setState("loading");
-
-    if (!props.name) return;
     fetchPokemonByName(props.name)
       .then(pokemon => {
         setPokemon(pokemon);
