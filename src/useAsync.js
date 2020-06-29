@@ -1,21 +1,64 @@
-import { useState, useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
+
+const initialState = {
+  data: null,
+  state: "idle"
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "START_FETCH": {
+      return {
+        data: null,
+        state: "loading",
+        error: null
+      };
+    }
+    case "DATA_FETCHED": {
+      return {
+        data: action.data,
+        state: "loading",
+        error: null
+      };
+    }
+    case "ERROR": {
+      return {
+        data: null,
+        state: "error",
+        error: action.error
+      };
+    }
+    default: {
+      return initialState;
+    }
+  }
+};
 
 const useAsync = (asyncFn, dependencies) => {
-  const [data, setData] = useState(null);
-  const [state, setState] = useState("idle");
+  const [state, dispatch] = React.useReducer(reducer, initialState);
 
   useEffect(() => {
-    setState("loading");
-    setData(null);
-
+    dispatch({
+      type: "START_FETCH"
+    });
     asyncFn()
       .then(data => {
-        setState("idle");
-        setData(data);
+        dispatch({
+          type: "DATA_FETCHED",
+          data
+        });
       })
       .catch(err => {
-        setState("error");
+        dispatch({
+          type: "ERROR",
+          error: err
+        });
       });
     // eslint-disable-next-line
   }, dependencies);
+
+  return [state.data, state.state];
 };
+
+export default useAsync;
