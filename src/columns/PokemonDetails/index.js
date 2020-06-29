@@ -16,6 +16,8 @@ const PokemonGames = props => {
 
     setGames(null);
 
+    setState("loading");
+
     fetchPokemonGames(props.pokemon.game_indices.map(game => game.version.name))
       .then(games => {
         setGames(games);
@@ -46,6 +48,8 @@ const Pokemon = props => {
     if (!props.name) return;
 
     setPokemon(null);
+
+    setState("loading");
 
     fetchPokemonByName(props.name)
       .then(pokemon => {
