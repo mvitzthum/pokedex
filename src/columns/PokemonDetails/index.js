@@ -6,19 +6,19 @@ import PokemonGamesSection from "../../components/PokemonGamesSection";
 import Column from "../../components/Column";
 import { fetchPokemonGames, fetchPokemonByName } from "../../api/pokeapi";
 
-const PokemonGames = props => {
+const usePokemonGames = pokemon => {
   const [games, setGames] = React.useState(null);
 
   const [state, setState] = React.useState("idle");
 
   React.useEffect(() => {
-    if (!props.pokemon) return;
+    if (!pokemon) return;
 
     setGames(null);
 
     setState("loading");
 
-    fetchPokemonGames(props.pokemon.game_indices.map(game => game.version.name))
+    fetchPokemonGames(pokemon.game_indices.map(game => game.version.name))
       .then(games => {
         setGames(games);
       })
@@ -28,7 +28,13 @@ const PokemonGames = props => {
       .finally(() => {
         setState("idle");
       });
-  }, [props.pokemon]);
+  }, [pokemon]);
+
+  return [games, state];
+};
+
+const PokemonGames = props => {
+  const [games, state] = usePokemonGames(props.pokemon);
 
   return (
     <>
@@ -39,19 +45,19 @@ const PokemonGames = props => {
   );
 };
 
-const Pokemon = props => {
+const usePokemon = name => {
   const [pokemon, setPokemon] = React.useState(null);
 
   const [state, setState] = React.useState("idle");
 
   React.useEffect(() => {
-    if (!props.name) return;
+    if (!name) return;
 
     setPokemon(null);
 
     setState("loading");
 
-    fetchPokemonByName(props.name)
+    fetchPokemonByName(name)
       .then(pokemon => {
         setPokemon(pokemon);
       })
@@ -61,7 +67,13 @@ const Pokemon = props => {
       .finally(() => {
         setState("idle");
       });
-  }, [props.name]);
+  }, [name]);
+
+  return [pokemon, state];
+};
+
+const Pokemon = props => {
+  const [pokemon, state] = usePokemon(props.name);
 
   return (
     <Column width={1} p={4}>
