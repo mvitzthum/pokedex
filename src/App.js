@@ -19,7 +19,10 @@ const App = () => {
   return (
     <BaseStyles>
       <Flex>
-        <PokemonList setSelectedPokemon={setSelectedPokemon} />
+        <React.Suspense fallback={<Spinner />}>
+          <PokemonList setSelectedPokemon={setSelectedPokemon} />
+        </React.Suspense>
+
         {selectedPokemon && (
           <React.Suspense fallback={<Spinner />}>
             <PokemonDetails name={selectedPokemon} />
