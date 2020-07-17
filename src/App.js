@@ -8,6 +8,10 @@ import PokemonDetails from "./columns/PokemonDetails";
 const App = () => {
   const [selectedPokemon, setSelectedPokemon] = React.useState(null);
 
+  React.useEffect(() => {
+    document.title = `${selectedPokemon ? `${selectedPokemon} | ` : ""}Pokedex`;
+  }, [selectedPokemon]);
+
   return (
     <BaseStyles>
       <Flex>
