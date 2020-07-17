@@ -6,7 +6,7 @@ import PokemonGamesSection from "../../components/PokemonGamesSection";
 import Column from "../../components/Column";
 import { fetchPokemonGames, fetchPokemonByName } from "../../api/pokeapi";
 
-const PokemonGames = props => {
+const usePokemonGames = props => {
   const [games, setGames] = React.useState(null);
   const [state, setState] = React.useState("idle");
 
@@ -31,6 +31,12 @@ const PokemonGames = props => {
     };
   }, [props.pokemon]);
 
+  return [games, state];
+};
+
+const PokemonGames = props => {
+  const [games, state] = usePokemonGames(props);
+
   return (
     <>
       {state === "loading" && <Spinner />}
@@ -40,7 +46,7 @@ const PokemonGames = props => {
   );
 };
 
-const Pokemon = props => {
+const usePokemon = props => {
   const [pokemon, setPokemon] = React.useState(null);
   const [state, setState] = React.useState("idle");
 
@@ -63,6 +69,12 @@ const Pokemon = props => {
       setPokemon(null);
     };
   }, [props.name]);
+
+  return [pokemon, state];
+};
+
+const Pokemon = props => {
+  const [pokemon, state] = usePokemon(props);
 
   return (
     <Column width={1} p={4}>
