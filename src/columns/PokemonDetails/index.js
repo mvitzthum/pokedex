@@ -13,8 +13,6 @@ const PokemonGames = props => {
   useEffect(() => {
     if (!props.pokemon) return;
 
-    setGames(null);
-
     setState("loading");
 
     fetchPokemonGames(props.pokemon.game_indices.map(game => game.version.name))
@@ -27,6 +25,10 @@ const PokemonGames = props => {
       .finally(() => {
         setState("idle");
       });
+
+    return () => {
+      setGames(null);
+    };
   }, [props.pokemon]);
 
   return (
@@ -45,8 +47,6 @@ const Pokemon = props => {
   useEffect(() => {
     if (!props.name) return;
 
-    setPokemon(null);
-
     setState("loading");
     fetchPokemonByName(props.name)
       .then(pokemon => {
@@ -58,6 +58,10 @@ const Pokemon = props => {
       .finally(() => {
         setState("idle");
       });
+
+    return () => {
+      setPokemon(null);
+    };
   }, [props.name]);
 
   return (
